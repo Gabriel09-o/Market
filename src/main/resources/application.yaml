@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: JWT
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/JWT
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        "[format_sql]": true
+        
+server:
+  port: 9090
+  servlet:
+    context-path: /api/v1/
+
+logging:
+  level:
+    "[org.springframework]": INFO
+
+security:
+  jwt:
+    # Clave secreta que se genera con openssl rand -base64 32
+    secret-key: WCrD7ZwsNH2yZx4d29X3522BEAYTjm7BiNJxi9xksjU=
+    # Expiracion expresada en ms (10 min)
+    token-expiration: 600000
