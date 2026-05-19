@@ -15,70 +15,61 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.supermercado.market.dto.VentaDTO;
+import com.supermercado.market.security.Permission;
+import com.supermercado.market.service.AuthorizationService;
 import com.supermercado.market.service.VentaService;
 
-/**
- * Controlador para gestionar las operaciones relacionadas con las ventas.
- */
+import jakarta.servlet.http.HttpServletRequest;
+
+/* Controlador para gestionar las operaciones relacionadas con las ventas */
 @RestController
 @RequestMapping("/ventas")
 public class VentaController {
 
-    /**
-     * Servicio para gestionar las operaciones relacionadas con las ventas.
-     */
+    /* Servicio para gestionar las operaciones relacionadas con las ventas */
     @Autowired
     private VentaService ventaService;
 
-    /**
-     * Obtiene todas las ventas.
-     * @return Lista de ventas.
-     */
+    /* Servicio para gestionar la autorización de operaciones */
+    @Autowired
+    private AuthorizationService authorizationService;
+
+    /* Endpoint para obtener todas las ventas */
     @GetMapping
-    public List<VentaDTO> getAll() {
+    public List<VentaDTO> getAll(HttpServletRequest request) {
+        authorizationService.requirePermission(request, Permission.SALES_READ);
         return ventaService.getAllVentas();
     }
 
-    /**
-     * Crea una nueva venta.
-     * @param ventaDTO DTO con los datos de la venta a crear.
-     * @return Venta creada.
-     */
+    /* Endpoint para crear una nueva venta */
     @PostMapping
-    public VentaDTO create(@RequestBody VentaDTO ventaDTO) {
+    public VentaDTO create(@RequestBody VentaDTO ventaDTO, HttpServletRequest request) {
+        authorizationService.requirePermission(request, Permission.SALES_CREATE);
         return ventaService.procesarVenta(ventaDTO);
     }
 
-    /**
-     * Obtiene una venta por su ID.
-     * @param id ID de la venta.
-     * @return Venta encontrada.
-     */
+    /* Endpoint para obtener una venta por su ID */
     @GetMapping("/{id}")
-    public VentaDTO getById(@PathVariable Long id) {
+    public VentaDTO getById(@PathVariable Long id, HttpServletRequest request) {
+        authorizationService.requirePermission(request, Permission.SALES_READ);
         return ventaService.getVenta(id);
     }
 
-    /**
-     * Elimina una venta.
-     * @param id ID de la venta a eliminar.
-     * @return Venta eliminada.
-     */
+    /* Endpoint para eliminar una venta */
     @DeleteMapping("/{id}")
-    public VentaDTO delete(@PathVariable Long id) {
+    public VentaDTO delete(@PathVariable Long id, HttpServletRequest request) {
+
+        authorizationService.requirePermission(request, Permission.SALES_READ);
         return ventaService.deleteVenta(id);
     }
 
-    /**
-     * Obtiene las ventas por rango de fechas.
-     * @param inicio Fecha de inicio.
-     * @param fin Fecha de fin.
-     * @return Lista de ventas.
-     */
+    /* Endpoint para obtener ventas por rango de fechas */
     @GetMapping("/rango")
     public List<VentaDTO> getByRangoFecha(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
+            HttpServletRequest request) {
+        authorizationService.requirePermission(request, Permission.SALES_READ);
         return ventaService.listarPorRangoFecha(inicio, fin);
     }
 }

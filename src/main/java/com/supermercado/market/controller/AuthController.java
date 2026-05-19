@@ -74,10 +74,13 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+        /* Extraer el token del encabezado */
         String token = autheader.replace("Bearer ", "");
 
+        /* Refrescar el token */
         RefreshTokenResponseDTO response = new RefreshTokenResponseDTO();
 
+        /* Llamar al servicio para refrescar el token */
         try {
             response = authService.refreshToken(token);
             return ResponseEntity.status(HttpStatus.OK).body(response); 
