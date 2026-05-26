@@ -53,7 +53,6 @@ public class JwtService {
     public String generateToken(Long userId, Long rolId, String userName) {
         return Jwts.builder() // se empieza a contruir el jwt
                 .claims(Map.of("userId", userId)) // Mapeamos el claim personalizado (claim: datos del payload que
-                                                  // correnponden a la informacion del usuario)
                 .claims(Map.of("rolId", rolId))
                 .subject(userName) // A quien pertenece el token
                 .issuedAt(new Date()) // Fecha de creación del token

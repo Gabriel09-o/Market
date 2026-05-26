@@ -20,6 +20,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
      */
     private final JwtService jwtService;
 
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException {
@@ -64,6 +65,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
 
-        return path.startsWith("/api/v1/auth");
+        return path.startsWith("/api/v1/auth/login");
     }
 }
